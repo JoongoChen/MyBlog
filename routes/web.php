@@ -21,3 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/user/password','UsersController@password');
 Route::post('/user/change_pwd','UsersController@changePwd');
+
+Route::get('/user/email/verify/{token}','UsersController@emailVerify')->name('email.verify');
+
+Route::get('/questions','QuestionsController@index');

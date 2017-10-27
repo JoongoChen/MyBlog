@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mailer\UserMailer;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -62,7 +63,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -70,5 +71,12 @@ class RegisterController extends Controller
             'confirmation_token' => str_random(40),
             'api_token' => str_random(60)
         ]);
+        $this->sendVerifyEmailTo($user);
+        return $user;
+    }
+
+    public function sendVerifyEmailTo($user)
+    {
+        (new UserMailer)->welcome($user);
     }
 }
